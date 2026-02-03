@@ -59,9 +59,11 @@ export class NewComponent extends Component {
         this._startJump = true;//标记开始跳跃
         this._jumpStep = step;//跳跃步数
 
-        const clipName = step == 1 ? 'oneStep' : 'twoStep';  // 1. 选择动画片段
-        const state = this.BodyAnim.getState(clipName);      // 2. 获取动画状态
-        this._jumpTime = state.duration;                    // 3. 设置跳跃时间
+        //const clipName = step == 1 ? 'oneStep' : 'twoStep';  // 1. 选择动画片段
+        //const state = this.BodyAnim.getState(clipName);      // 2. 获取动画状态
+        //this._jumpTime = state.duration;                    // 3. 设置跳跃时间
+        const clipName = step == 1 ? 'oneStep' : 'twoStep';
+        this._jumpTime = this.BodyAnim.getState(clipName).duration;
 
         this._curJumpTime = 0;//重置开始跳跃时间
         this._curJumpSpeed = this._jumpStep*BLOCK_SIZE / this._jumpTime;//计算速度
