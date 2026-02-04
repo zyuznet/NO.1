@@ -6,6 +6,11 @@ enum BlockType {
     BT_NONE,
     BT_STONE,
 };
+enum GameState {
+    GS_INIT,
+    GS_PLAYING,
+    GS_END,
+};
 
 @ccclass('GameManager')
 export class GameManager extends Component {
@@ -16,6 +21,11 @@ export class GameManager extends Component {
     private _road: BlockType[] = [];
 
     start() {
+        //设置初始状态
+        this.setCurState(GameState.GS_INIT);
+    }
+        //游戏启动
+    init(){
         this.genetateRoad();
     }
 
@@ -61,6 +71,20 @@ export class GameManager extends Component {
         }
         return block;
     }
+    //设置当前游戏状态
+    setCurState(value: GameState){
+        switch(value){
+            case GameState.GS_INIT:
+                //调用游戏启动
+                this.init();
+                break;
+            case GameState.GS_PLAYING:
+                break;
+            case GameState.GS_END:
+                break;
+        }
+    }
+
 }
 
 

@@ -24,7 +24,7 @@ export class NewComponent extends Component {
     private _targetPos: Vec3 = new Vec3();
     
     start() {
-        input.on(Input.EventType.MOUSE_UP,this.onMouthUp,this);
+        //input.on(Input.EventType.MOUSE_UP,this.onMouthUp,this);
     }
 
     update(deltaTime: number) {
@@ -39,6 +39,16 @@ export class NewComponent extends Component {
                 Vec3.add(this._curPos,this._curPos,this._deltaPos);
                 this.node.setPosition(this._curPos);
             }
+        }
+    }
+
+    setInputActive(active:boolean){
+        if(active){
+            //如果是活动的，则监听鼠标事件
+            input.on(Input.EventType.MOUSE_UP,this.onMouthUp,this);
+        }else{
+            //如果是不活动的，则取消监听鼠标事件
+            input.off(Input.EventType.MOUSE_UP,this.onMouthUp,this);
         }
     }
 
