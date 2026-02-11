@@ -121,6 +121,10 @@ export class GameManager extends Component {
                 break;
         }
     }
+    onStartButtonClicked(){
+        //点击开始按钮，进入游戏状态
+        this.setCurState(GameState.GS_PLAYING);
+    }
 
 }
 
