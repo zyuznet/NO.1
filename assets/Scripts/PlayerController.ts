@@ -2,8 +2,8 @@ import { _decorator, Component, EventMouse, Input, input, Node, Vec3, Animation 
 const { ccclass, property } = _decorator;
 export const BLOCK_SIZE = 40;
 
-@ccclass('NewComponent')
-export class NewComponent extends Component {
+@ccclass('PlayerController')
+export class PlayerController extends Component {
     @property(Animation)
     BodyAnim:Animation = null;
     //是否开始跳跃： _startJump，用于判断角色是否在跳跃状态
@@ -27,6 +27,9 @@ export class NewComponent extends Component {
         //input.on(Input.EventType.MOUSE_UP,this.onMouthUp,this);
     }
 
+    reset(){
+        
+    }
     update(deltaTime: number) {
         if (this._startJump) {
             this._curJumpTime += deltaTime;

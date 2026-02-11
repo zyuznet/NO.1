@@ -1,5 +1,5 @@
-import { _decorator, CCInteger, Component, instantiate, Node, Prefab } from 'cc';
-import { BLOCK_SIZE } from './PlayerController';
+import { _decorator, CCInteger, Component, instantiate, Label, Node, Prefab, Vec3 } from 'cc';
+import { BLOCK_SIZE, PlayerController} from './PlayerController';
 const { ccclass, property } = _decorator;
 
 enum BlockType {
@@ -19,6 +19,13 @@ export class GameManager extends Component {
     @property({type: CCInteger})
     public roadLength: number = 50;
     private _road: BlockType[] = [];
+    @property({type: Node})
+    public startManu: Node|null = null;//开始的UI
+    @property({type: PlayerController})
+    public playerCtrl: PlayerController|null = null;//角色控制器
+    @property({type: Label})
+    public stepLabel: Label|null = null;//分数标签
+
 
     start() {
         //设置初始状态
@@ -26,7 +33,35 @@ export class GameManager extends Component {
     }
         //游戏启动
     init(){
+        if (this.startManu){
+            this.startManu.active = true;
+        }
+
         this.genetateRoad();
+
+        if(this.playerCtrl){
+            this.playerCtrl.setInputActive(false);
+            this.playerCtrl.node.setPosition(Vec3.ZERO);
+            this.playerCtrl.reset();
+        }
+    }
+
+    playing(){
+        if(this.startManu){
+            this.startManu.active = false;
+        }
+        if(this.stepLabel){
+            this.stepLabel.string = "0";
+        }
+        setTimeout(() => {
+            if(this.playerCtrl){
+                this.playerCtrl.setInputActive(true);
+            }
+        }, 0.1);
+    }
+
+    end(){
+
     }
 
     update(deltaTime: number) {
@@ -79,8 +114,10 @@ export class GameManager extends Component {
                 this.init();
                 break;
             case GameState.GS_PLAYING:
+                this.playing();
                 break;
             case GameState.GS_END:
+                this.end();
                 break;
         }
     }
