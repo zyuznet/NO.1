@@ -22,20 +22,25 @@ export class PlayerController extends Component {
     private _deltaPos: Vec3 = new Vec3(0, 0, 0);
     //目标位置
     private _targetPos: Vec3 = new Vec3();
+
+    private _curMoveIndex: number = 0;//当前步数
     
     start() {
         //input.on(Input.EventType.MOUSE_UP,this.onMouthUp,this);
     }
 
     reset(){
-        
+        this._curMoveIndex = 0;//重置步数
+        this.node.getPosition(this._curPos);//获取当前位置
+        this._targetPos.set(0,0,0);//重置目标位置
     }
     update(deltaTime: number) {
         if (this._startJump) {
             this._curJumpTime += deltaTime;
-            if (this._curJumpTime > this._jumpTime) {
-                this.node.setPosition(this._targetPos);
-                this._startJump = false;
+            if (this._curJumpTime > this._jumpTime) {//如果当前跳跃时间超过了设定的跳跃时间
+                this.node.setPosition(this._targetPos);//直接设置到目标位置
+                this._startJump = false;//标记跳跃结束
+                this.onOnceJumpEnd();//触发一次跳跃结束事件
             }else{
                 this.node.getPosition(this._curPos);
                 this._deltaPos.x = this._curJumpSpeed*deltaTime;
@@ -53,6 +58,9 @@ export class PlayerController extends Component {
             //如果是不活动的，则取消监听鼠标事件
             input.off(Input.EventType.MOUSE_UP,this.onMouthUp,this);
         }
+    }
+    onOnceJumpEnd(){
+        this.node.emit('jumpEnd',this._curMoveIndex);
     }
 
     onMouthUp(event:EventMouse){
@@ -91,6 +99,7 @@ export class PlayerController extends Component {
                 this.BodyAnim.play('twoStep')
             }
         }
+        this._curMoveIndex += step;//更新当前步数
     }
 
 }

@@ -30,6 +30,7 @@ export class GameManager extends Component {
     start() {
         //设置初始状态
         this.setCurState(GameState.GS_INIT);
+        this.playerCtrl?.node.on('jumpEnd',this.onPlayerJumpEnd,this);
     }
         //游戏启动
     init(){
@@ -125,7 +126,23 @@ export class GameManager extends Component {
         //点击开始按钮，进入游戏状态
         this.setCurState(GameState.GS_PLAYING);
     }
-
+    onPlayerJumpEnd(moveIndex: number){
+        //更新分数显示
+        if(this.stepLabel){
+            this.stepLabel.string = '' + (moveIndex >= this._road.length ? this._road.length : moveIndex);//更新分数显示
+        }
+        this.checkResult(moveIndex);//检查结果
+    }
+    checkResult(moveIndex: number){
+        if(moveIndex < this._road.length){
+            if(this._road[moveIndex] === BlockType.BT_NONE){
+                //如果踩到了空地块，游戏结束
+                this.setCurState(GameState.GS_INIT);
+            }
+        }else{
+                this.setCurState(GameState.GS_INIT);//如果超过了路的长度，也算游戏结束
+        }
+    }
 }
 
 
